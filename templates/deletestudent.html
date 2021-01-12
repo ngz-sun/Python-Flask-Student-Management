@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block stutitle %}
+    删除学生
+{% endblock %}
+
+{% block stumain %}
+
+
+
+    <form method="post" class="smart-green">
+    <h1>删除系统</h1>
+    <label>
+        <span>学号 :</span>
+        <input id="name" type="text" name="txtxuehao" class="error" placeholder="请输入您的学号"/>
+       
+    </label>
+
+    <div class="success-msg">
+             <div class="flash-message" style="">
+            {% with messages = get_flashed_messages(category_filter=["3"]) %}
+        {% if messages %}
+            <ul style="margin:0;margin-bottom: 2px; ">
+            {% for message in messages %}
+                <li style="list-style:none;background-color:#f2dede;border-color:#ebccd1;color:#a94442;text-align: center;">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+    </div>
+    <label>
+        <span>&nbsp;</span>
+        <input type="submit" class="button" value="删除"/>
+    </label>
+</form>
+
+{% endblock %}

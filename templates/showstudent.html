@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% block stutitle %}
+    添加学生
+{% endblock %}
+{% block stustyle %}
+    /*搜索框1*/
+
+    .bar1 input {
+    border: 2px solid #7BA7AB;
+    border-radius: 5px;
+    background: #F9F0DA;
+    color: #9E9C9C;
+    }
+    .bar1 button {
+    top: 0;
+    right: 0;
+    background: #7BA7AB;
+    border-radius: 0 5px 5px 0;
+    }
+    .bar1 button:before {
+    content: "\f002";
+    font-family: FontAwesome;
+    font-size: 16px;
+    color: #F9F0DA;
+    }
+    #ddd {
+    width: 300px;
+    margin: 10px auto;
+}
+
+{% endblock %}
+{% block stumain %}
+
+    <div class="search bar1" id="ddd">
+        <form action="{{ url_for('search') }}" method="get">
+            <input type="text" name="q" placeholder="请输入学号查询" autocomplete="off">
+            <button type="submit"></button>
+        </form>
+    </div>
+
+
+
+    <div class="col-xs-12">
+        <table id="simple-table" class="table  table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>成绩</th>
+                <th>编辑</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stu in stuinfos %}
+                <tr>
+                    <td>
+                        {{ stu.stunumber }}
+                    </td>
+                    <td>
+                        {{ stu.stuname }}
+                    </td>
+                    <td>
+                        {{ stu.grede }}
+                    </td>
+                    <td>
+                        <div class="hidden-sm hidden-xs btn-group ">
+
+                            <button class="btn btn-xs btn-info btn-click" data-toggle="modal" data-target="#myModal" id ="{{ stu.id }}">
+                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                            </button>
+
+
+                            <button class="btn btn-xs btn-danger btn-click1" id ="{{ stu.id }}">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </button>
+
+                        </div>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        模态框（Modal）标题
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="smart-green">
+                            <h1>编辑系统</h1>
+                            <label>
+                                <span>学号 :</span>
+                                <input id="name" class="nan2" type="text" name="txtxuehao" />
+                               
+                            </label>
+
+
+                            <label>
+                                <span>姓名 :</span>
+                                <input id="email" class="nan1" type="text" name="txtxingming"/>
+                             
+                            </label>
+
+                            <label>
+                                <span>成绩 :</span>
+                                <input id="address" class="nan3" type="text" name="txtchengji"/>
+                               
+                        <div class="error-msg"></div>
+                            </label>
+                           
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style=".modal-header .close {
+    margin-top: -8px;
+    /* margin-right: 83px; */
+    margin-left: 533px;
+}">关闭
+                    </button>
+
+                    <button type="button" class="btn btn-primary nan6" >
+                        提交
+                    </button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $(".btn-click").click(function () {
+                var post_id = $(this).attr('id');
+                $.ajax({
+                    url: "/edit/" + post_id,
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $(".nan1").attr("value", data.name);
+                        $(".nan2").attr("value", data.number);
+                        $(".nan3").attr("value", data.grade);
+
+
+                        // resp.status 等于 1 时，则说明成功，前端处理，此处为重新加载本页。
+
+                    }
+                });
+                {#   $.ajax({
+                       url: "/edit", success: function (data) {
+                           alert(data.name+data.number+data.grade);
+                           $(".nan1").attr("value",data.name);
+                           $(".nan2").attr("value",data.number);
+                           $(".nan3").attr("value",data.grade);
+
+                       }
+                   });#}
+            });
+            $(".nan6").click(function () {
+                var post_id = $(".btn-click").attr('id');
+                var name = $(".nan1").val();
+                var number = $(".nan2").val();
+                var grade = $(".nan3").val();
+                $.ajax({
+                    url: "/editstu/",
+                    type: "POST",
+                    data: {
+                        "post_id": post_id,
+                        "name": name,
+                        "number": number,
+                        "grade": grade
+                    },
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.message == "success") {
+                            alert("编辑成功")
+                            location.reload();
+                        }
+                    }
+
+                })
+            });
+            $('.btn-click1').on('click', function () {
+                swal({
+                        title: "Are you sure?",
+                        text: "删除后，不可修复!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        var post_id = $(".btn-click").attr('id');
+                        $.ajax({
+                            url: "/delete/" + post_id,
+                            type: "POST",
+                            dataType: "JSON",
+                            success: function (resp) {
+                                if (resp.status != 1) {
+                                    // 不等于 1 则说明删除失败，原因有很多，具体呢，就是服务端返回的 resp.message
+                                    alert("删除失败，原因：" + resp.message);
+                                }
+                                if (resp.message == "success") {
+
+                                    alert("删除成功")
+                                    // resp.status 等于 1 时，则说明成功，前端处理，此处为重新加载本页。
+                                    location.reload()
+
+                                }
+
+                            }
+                        })
+                    });
+            })
+        });
+
+</script>
+{% endblock %}

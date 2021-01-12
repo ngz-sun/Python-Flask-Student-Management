@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block stutitle %}
+    编辑学生
+{% endblock %}
+
+{% block stumain %}
+    <form method="post" class="smart-green">
+    <h1>编辑系统</h1>
+    <label>
+        <span>学号 :</span>
+        <input id="name" type="text" name="txtxuehao" class="error" placeholder="请选择修改学号"/>
+       
+    </label>
+
+
+    <label>
+        <span>姓名 :</span>
+        <input id="email" type="text" name="txtxingming" placeholder="请选择修改后的姓名"/>
+       
+    </label>
+
+    <label>
+        <span>成绩 :</span>
+        <input id="address" type="text" name="txtchengji" placeholder="请选择修改后的成绩"/>
+        <div class="error-msg"></div>
+    </label>
+    <div class="success-msg">
+           <div class="flash-message">
+            {% with messages = get_flashed_messages(category_filter=["4"]) %}
+        {% if messages %}
+            <ul style="margin:0;margin-bottom: 2px; ">
+            {% for message in messages %}
+                <li style="list-style:none;background-color:#f2dede;border-color:#ebccd1;color:#a94442;text-align: center;">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+    </div>
+    <label>
+        <span>&nbsp;</span>
+        <input type="submit" class="button" value="修改"/>
+    </label>
+</form>
+{% endblock %}
